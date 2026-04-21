@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Pallavi! 🎉</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono&family=Inter:wght@300;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --text: #ffffff;
+            --primary: #00f7ff;
+            --secondary: #ff00ff;
+            --accent: #ffd700;
+            --danger: #ff4d4d;
+            --transition: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* --- Audio Controls --- */
+        #audio-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .btn-mute {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            transition: 0.3s;
+        }
+
+        .btn-mute:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* --- Scenes Container --- */
+        .scene {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+            text-align: center;
+            padding: 20px;
+        }
+
+        .scene.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* --- Global Animations --- */
+        .glitch {
+            position: relative;
+            text-shadow: 0.05em 0 0 var(--secondary), -0.025em -0.05em 0 var(--primary),
+                         0.025em 0.05em 0 var(--accent);
+            animation: glitch 500ms infinite;
+        }
+
+        @keyframes glitch {
+            0% { text-shadow: 0.05em 0 0 var(--secondary), -0.025em -0.05em 0 var(--primary), 0.025em 0.05em 0 var(--accent); }
+            14% { text-shadow: 0.05em 0 0 var(--secondary), -0.025em -0.05em 0 var(--primary), 0.025em 0.05em 0 var(--accent); }
+            15% { text-shadow: -0.05em -0.025em 0 var(--secondary), 0.025em 0.025em 0 var(--primary), -0.05em -0.05em 0 var(--accent); }
+            49% { text-shadow: -0.05em -0.025em 0 var(--secondary), 0.025em 0.025em 0 var(--primary), -0.05em -0.05em 0 var(--accent); }
+            50% { text-shadow: 0.025em 0.05em 0 var(--secondary), 0.05em 0 0 var(--primary), 0 -0.05em 0 var(--accent); }
+            99% { text-shadow: 0.025em 0.05em 0 var(--secondary), 0.05em 0 0 var(--primary), 0 -0.05em 0 var(--accent); }
+            100% { text-shadow: -0.025em 0 0 var(--secondary), -0.025em -0.025em 0 var(--primary), -0.025em -0.05em 0 var(--accent); }
+        }
+
+        /* --- Scene 0: Landing (Start Trigger) --- */
+        #scene-0 {
+            background: radial-gradient(circle at center, #111, #000);
+        }
+
+        .btn-start {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 15px 40px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 20px rgba(0, 247, 255, 0.2);
+            text-transform: uppercase;
+        }
+
+        .btn-start:hover {
+            background: var(--primary);
+            color: var(--bg);
+            box-shadow: 0 0 40px var(--primary);
+        }
+
+        /* --- Scene 1: Intro --- */
+        #scene-1 .terminal-text {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.5rem;
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary);
+        }
+
+        /* --- Scene 2: Titles --- */
+        #scene-2 h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        /* --- Scene 3: Images --- */
+        #scene-3 .image-container {
+            width: 90%;
+            max-width: 500px;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            border: 4px solid var(--accent);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        #scene-3 img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: 2s ease-in-out;
+        }
+
+        #scene-3 h3 {
+            margin-top: 20px;
+            font-style: italic;
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        /* --- Scene 4: Emotional --- */
+        #scene-4 {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+        }
+
+        #scene-4 p {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            line-height: 1.6;
+            max-width: 800px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* --- Scene 5: Final --- */
+        #scene-5 .bday-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 5rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: hue-rotate 3s infinite linear;
+        }
+
+        @keyframes hue-rotate {
+            from { filter: hue-rotate(0deg); }
+            to { filter: hue-rotate(360deg); }
+        }
+
+        #scene-5 .from-text {
+            margin-top: 30px;
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            color: var(--accent);
+        }
+
+        /* --- Confetti --- */
+        #confetti-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            pointer-events: none;
+        }
+
+        /* --- Mobile Tweaks --- */
+        @media (max-width: 768px) {
+            #scene-2 h2 { font-size: 2.1rem; }
+            #scene-5 .bday-text { font-size: 2.1rem; }
+            #scene-4 p { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="audio-controls">
+        <button class="btn-mute" id="mute-btn">🎵</button>
+    </div>
+
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Scene 0: Landing -->
+    <section class="scene active" id="scene-0">
+        <button class="btn-start" id="start-btn">Initiate Experience</button>
+    </section>
+
+    <!-- Scene 1: Intro -->
+    <section class="scene" id="scene-1">
+        <div class="terminal-text" id="intro-text"></div>
+    </section>
+
+    <!-- Scene 2: Titles -->
+    <section class="scene" id="scene-2">
+        <h2 id="title-text" class="glitch"></h2>
+    </section>
+
+    <!-- Scene 3: Images -->
+    <section class="scene" id="scene-3">
+        <div class="image-container">
+            <img id="scene-img" src="" alt="Moment">
+        </div>
+        <h3 id="scene-caption"></h3>
+    </section>
+
+    <!-- Scene 4: Emotional -->
+    <section class="scene" id="scene-4">
+        <div id="emotional-container">
+            <p id="emotional-text"></p>
+        </div>
+    </section>
+
+    <!-- Scene 5: Final -->
+    <section class="scene" id="scene-5">
+        <h1 class="bday-text">HAPPY BIRTHDAY PALLAVI 🎉</h1>
+        <p class="from-text">— From VISHAL 💛</p>
+        <p style="margin-top: 20px; color: rgba(255,255,255,0.5);">Stay the same… just a little less attitude 😌</p>
+    </section>
+
+    <audio id="audio-suspense" preload="auto" loop>
+        <source src="https://raw.githubusercontent.com/the-maldridge/open-music/master/music/KevinMacLeod/DeepHaze.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="audio-funny" preload="auto" loop>
+        <source src="https://raw.githubusercontent.com/the-maldridge/open-music/master/music/KevinMacLeod/MonkeysSpinningMonkeys.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="audio-emotional" preload="auto" loop>
+        <source src="https://raw.githubusercontent.com/the-maldridge/open-music/master/music/KevinMacLeod/Heartbreaking.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const scenes = document.querySelectorAll('.scene');
+        const startBtn = document.getElementById('start-btn');
+        const muteBtn = document.getElementById('mute-btn');
+        const introTextEl = document.getElementById('intro-text');
+        const titleTextEl = document.getElementById('title-text');
+        const sceneImg = document.getElementById('scene-img');
+        const sceneCaption = document.getElementById('scene-caption');
+        const emotionalTextEl = document.getElementById('emotional-text');
+        const audioSuspense = document.getElementById('audio-suspense');
+        const audioFunny = document.getElementById('audio-funny');
+        const audioEmotional = document.getElementById('audio-emotional');
+        const audioControls = document.getElementById('audio-controls');
+
+        let isMuted = false;
+        let currentAudio = null;
+
+        const data = {
+            titles: [
+                "Attitude Queen 😎",
+                "Pallavi Ma’am 👑",
+                "Gorakhpur Don 💀",
+                "Drama Unlimited 🎭",
+                "Certified Overthinker 🙄",
+                "Professional Ignorer 😒"
+            ],
+            moments: [
+                { img: "public/img1.jpeg", cap: "When she thinks she owns the world 👑" },
+                { img: "public/img2.jpeg", cap: "Mood swings loading... 99% 💀" },
+                { img: "public/img3.jpeg", cap: "Ignoring me since day 1 😒" },
+                { img: "public/img4.jpeg", cap: "Still my favorite troublemaker 🤝" },
+                { img: "public/img5.jpeg", cap: "Wait, why are you like this? 🙄" },
+                { img: "public/img6.jpeg", cap: "Caught in 4k being a drama queen 📸" },
+                { img: "public/img7.jpeg", cap: "The ultimate boss level unlocked 💀" }
+            ],
+            emotional: [
+                "But wait... system update 😌",
+                "After full analysis...",
+                "Conclusion: Pallavi = certified drama machine 🎭",
+                "But also... best sister (unfortunately for me) 😤",
+                "Life without you = peaceful... but boring 😑",
+                "So yeah... keep annoying me forever 🤝"
+            ]
+        };
+
+        // --- Utils ---
+        function wait(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+
+        async function typeText(el, text, speed = 50) {
+            el.innerHTML = "";
+            for (let char of text) {
+                el.innerHTML += char === "\n" ? "<br>" : char;
+                await wait(speed);
+            }
+        }
+
+        function switchScene(id) {
+            scenes.forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function playAudio(audio) {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
+            currentAudio = audio;
+            if (!isMuted) {
+                currentAudio.play().catch(e => {
+                    console.log("Audio play blocked", e);
+                    startBtn.textContent = "Click to Resume Audio";
+                });
+            }
+        }
+
+        // Add error handling for all audio
+        [audioSuspense, audioFunny, audioEmotional].forEach(a => {
+            a.addEventListener('error', (e) => {
+                console.error("Audio failed to load:", a.id);
+            });
+        });
+
+        muteBtn.addEventListener('click', () => {
+            isMuted = !isMuted;
+            muteBtn.textContent = isMuted ? "🔇" : "🎵";
+            if (isMuted && currentAudio) currentAudio.pause();
+            else if (!isMuted && currentAudio) {
+                currentAudio.play().catch(e => console.log("Play failed", e));
+            }
+        });
+
+        // --- Sequence Engine ---
+        startBtn.addEventListener('click', async () => {
+            // Force Audio Context Resume for modern browsers
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            const audioCtx = new AudioContext();
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            // Unlock all audio elements for the session
+            [audioSuspense, audioFunny, audioEmotional].forEach(audio => {
+                audio.play().then(() => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }).catch(e => console.log("Sound unlock blocked", e));
+            });
+
+            audioControls.style.opacity = "1";
+            playAudio(audioSuspense);
+            
+            // Step 1: Intro
+            switchScene('scene-1');
+            await wait(1000);
+            await typeText(introTextEl, "Analyzing Subject...\nName Detected: PALLAVI\nThreat Level: Drama Queen 🎭", 60);
+            await wait(2000);
+
+            // Step 2: Funny Titles
+            playAudio(audioFunny);
+            switchScene('scene-2');
+            for (let title of data.titles) {
+                titleTextEl.textContent = title;
+                titleTextEl.style.animation = 'none';
+                titleTextEl.offsetHeight; // trigger reflow
+                titleTextEl.style.animation = 'glitch 500ms infinite';
+                await wait(1800);
+            }
+
+            // Step 3: Moments
+            switchScene('scene-3');
+            for (let moment of data.moments) {
+                sceneImg.src = moment.img;
+                sceneCaption.textContent = moment.cap;
+                // Add a small zoom effect transition
+                sceneImg.style.transform = "scale(1.1)";
+                await wait(2500);
+                sceneImg.style.transform = "scale(1)";
+            }
+
+            // Step 4: Emotional
+            playAudio(audioEmotional);
+            switchScene('scene-4');
+            for (let line of data.emotional) {
+                await typeText(emotionalTextEl, line, 50);
+                await wait(2500);
+            }
+
+            // Step 5: Final
+            switchScene('scene-5');
+            startConfetti();
+        });
+
+        // --- Confetti Logic ---
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function startConfetti() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            for (let i = 0; i < 150; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    size: Math.random() * 8 + 4,
+                    color: `hsl(${Math.random() * 360}, 80%, 60%)`,
+                    speed: Math.random() * 3 + 2,
+                    angle: Math.random() * 360,
+                    spin: Math.random() * 0.2 - 0.1
+                });
+            }
+            updateConfetti();
+        }
+
+        function updateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.y += p.speed;
+                p.angle += p.spin;
+                ctx.fillStyle = p.color;
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.angle);
+                ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                ctx.restore();
+                if (p.y > canvas.height) p.y = -20;
+            });
+            requestAnimationFrame(updateConfetti);
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
