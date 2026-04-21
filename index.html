@@ -322,7 +322,7 @@
         // --- Utils ---
         function wait(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
-        async function typeText(el, text, speed = 50) {
+        async function typeText(el, text, speed = 70) {
             el.innerHTML = "";
             for (let char of text) {
                 el.innerHTML += char === "\n" ? "<br>" : char;
